@@ -1,0 +1,8 @@
+$border_radius: 4px;
+$border_standard: 1px solid #DDD;
+
+.tcf-slider-wrap {
+	width: 100%;
+	border-radius: $border_radius;
+	border: $border_standard;
+}
