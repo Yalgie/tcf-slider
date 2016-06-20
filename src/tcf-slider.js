@@ -5,8 +5,7 @@ jQuery.fn.tcf_slider = function(options) {
     var defaults = {
     	loop: true,
     	auto: true,
-    	transition: "fade",
-    	activeCrumbColor: "#2FD565",
+    	transition: "fade"
     };
 
     var settings = $.extend( {}, defaults, options );
@@ -152,6 +151,7 @@ jQuery.fn.tcf_slider = function(options) {
         		else
         			target = 0;
         	}
+
         	methods.transitionImage(current, target);
         	methods.updateCrumb(target);
         	methods.checkLoop();
