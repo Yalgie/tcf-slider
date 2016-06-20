@@ -24,6 +24,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindKeyboardEvents();
         	methods.bindBlurEvents();
         	methods.bindMouseOverEvents();
+        	methods.checkLoop();
         },
 
         defineWrapElements: function() {
@@ -135,34 +136,56 @@ jQuery.fn.tcf_slider = function(options) {
         },
 
         nextImage: function() {
-        	var current = settings.eles.crumbWrap.find(".active").index()
+        	var current = settings.eles.crumbWrap.find(".active").index();
         	var next = current + 1;
-        	if (settings.transition == "none") {
-        		settings.eles.imageWrap.children().eq(current).hide()
-        		settings.eles.imageWrap.children().eq(next).show()
+        	if (settings.images[next] == undefined) {
+        		next = 0;
         	}
-        	methods.updateCrumb(next)
-        	methods.checkParams()
+        	if (settings.transition == "none") {
+        		settings.eles.imageWrap.children().eq(current).hide();
+        		settings.eles.imageWrap.children().eq(next).show();
+        	}
+        	methods.updateCrumb(next);
+        	methods.checkLoop();
         },
 
         prevImage: function() {
-        	var current = settings.eles.crumbWrap.find(".active").index()
+        	var current = settings.eles.crumbWrap.find(".active").index();
         	var prev = current - 1;
-        	if (settings.transition == "none") {
-        		settings.eles.imageWrap.children().eq(current).hide()
-        		settings.eles.imageWrap.children().eq(prev).show()
+        	if (settings.images[prev] == undefined) {
+        		prev = settings.images.length - 1;
         	}
-        	methods.updateCrumb(prev)
-        	methods.checkParams()
+        	if (settings.transition == "none") {
+        		settings.eles.imageWrap.children().eq(current).hide();
+        		settings.eles.imageWrap.children().eq(prev).show();
+        	}
+        	methods.updateCrumb(prev);
+        	methods.checkLoop();
         },
 
         updateCrumb: function(i) {
-        	settings.eles.crumbWrap.find(".active").removeClass("active")
-        	settings.eles.crumbWrap.children().eq(i).addClass("active")
+        	settings.eles.crumbWrap.find(".active").removeClass("active");
+        	settings.eles.crumbWrap.children().eq(i).addClass("active");
         },
 
-        checkParams: function() {
+        checkLoop: function() {
+        	var current = settings.eles.crumbWrap.find(".active").index();
+        	var next = settings.images[current + 1];
+        	if (!settings.loop) {
+        		if (current == 0) {
+        			settings.eles.prevWrap.fadeOut()
+        		}
+        		else {
+        			settings.eles.prevWrap.fadeIn()
+        		}
 
+        		if (next == undefined) {
+        			settings.eles.nextWrap.fadeOut()
+        		}
+        		else {
+        			settings.eles.nextWrap.fadeIn()
+        		}
+        	}
         }
     };
 
