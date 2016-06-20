@@ -37,7 +37,7 @@ gulp.task("build", ['minifyJs', 'compileSass','minifySass'], function() {
 });
 
 gulp.task('watchFiles', function() {
-  gulp.watch('src/tcf-slider.scss', ['compileSass', 'minifySass']);
+  gulp.watch('src/*.scss', ['compileSass', 'minifySass']);
   gulp.watch('src/tcf-slider.js', ['minifyJs']);
 })
 

@@ -1,0 +1,17 @@
+.tcf-slider-crumb-wrap {
+	position: absolute;
+	width: 100%;
+	bottom: 0px;
+	font-size: 2em;
+	text-align: center;
+}
+.tcf-slider-crumb {
+	cursor: pointer;
+	margin-right: 5px;
+}
+.tcf-slider-crumb:last-child {
+	margin-right: 0px;
+}
+.tcf-slider-crumb.active {
+	color: green;
+}

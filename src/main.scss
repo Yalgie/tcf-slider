@@ -1,0 +1,10 @@
+.tcf-slider-wrap,
+.tcf-slider-wrap:before,
+.tcf-slider-wrap:after {
+	clear: both;
+	float: none;
+}
+.tcf-slider-wrap {
+	width: 100%;
+	position: relative;
+}
