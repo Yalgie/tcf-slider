@@ -4,8 +4,10 @@ jQuery.fn.tcf_slider = function(options) {
 
     var defaults = {
     	loop: true,
-    	auto: true,
-    	transition: "slide"
+    	autoChange: true,
+    	transition: "slide",
+    	changeInterval: 4000,
+    	transitionDuration: 400
     };
 
     var settings = $.extend( {}, defaults, options );
@@ -26,9 +28,8 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindMouseOverEvents();
         	methods.checkLoop();
         	methods.bindResize();
-        	if (settings.auto) {
-        		// Up To Here
-        		methids.bindInterval();
+        	if (settings.autoChange) {
+        		methods.bindInterval();
         	}
         },
 
@@ -146,11 +147,9 @@ jQuery.fn.tcf_slider = function(options) {
         bindMouseOverEvents: function() {
         	settings.eles.prevWrap.on("mouseover", function() {
         		$(this).focus();
-        		$(this).children().animate({"marginLeft": -15}, {queue: false})
         	});
         	settings.eles.nextWrap.on("mouseover", function() {
         		$(this).focus();
-        		$(this).children().animate({"marginLeft": 15}, {queue: false})
         	});
         	settings.eles.crumbWrap.children().on("mouseover", function() {
         		$(this).focus();
@@ -190,9 +189,13 @@ jQuery.fn.tcf_slider = function(options) {
         		settings.animating = false;
         	}
         	else if (settings.transition == "fade") {
-        		settings.eles.imageWrap.children().eq(current).fadeOut(function() {
-        			settings.eles.imageWrap.children().eq(target).fadeIn();
-        			settings.animating = false;
+        		settings.eles.imageWrap.children().eq(current).fadeOut(
+        			settings.transitionDuration,
+        			function() {
+	        			settings.eles.imageWrap.children().eq(target).fadeIn(
+	        				settings.transitionDuration
+	        			);
+	        			settings.animating = false;
         		});
         	}
         	else if (settings.transition == "slide") {
@@ -204,20 +207,32 @@ jQuery.fn.tcf_slider = function(options) {
 
         		if (target > current) {
         			tar.css("left", "-100%")
-        			curr.animate({"left": "100%"}, {queue: false})
-        			tar.animate({"left": "0%"}, {queue: false, complete: function() {
-        				curr.removeClass("tcf-abs").hide()
-        				tar.removeClass("tcf-abs")
-        				settings.animating = false;
+        			curr.animate({"left": "100%"}, {
+        				duration:settings.transitionDuration,
+        				queue: false
+        			})
+        			tar.animate({"left": "0%"}, {
+        				queue: false,
+        				duration: settings.transitionDuration,
+        				complete: function() {
+	        				curr.removeClass("tcf-abs").hide()
+	        				tar.removeClass("tcf-abs")
+	        				settings.animating = false;
         			}})
         		}
         		else {
         			tar.css("left", "100%")
-        			curr.animate({"left": "-100%"}, {queue: false})
-        			tar.animate({"left": "0%"}, {queue: false, complete: function() {
-        				curr.removeClass("tcf-abs").hide()
-        				tar.removeClass("tcf-abs")
-        				settings.animating = false;
+        			curr.animate({"left": "-100%"}, {
+        				duration: settings.transitionDuration,
+        				queue: false
+        			})
+        			tar.animate({"left": "0%"}, {
+        				queue: false,
+        				duration: settings.transitionDuration,
+        				complete: function() {
+	        				curr.removeClass("tcf-abs").hide()
+	        				tar.removeClass("tcf-abs")
+	        				settings.animating = false;
         			}})
         		}
         	}
@@ -254,6 +269,20 @@ jQuery.fn.tcf_slider = function(options) {
         		var current = settings.eles.crumbWrap.find(".active").index();
 						var height = settings.eles.imageWrap.children().eq(current).css("height")
         		settings.eles.mainWrap.css("height", height)
+        	})
+        },
+
+        bindInterval: function() {
+        	settings.eles.timer = setInterval(function(){
+        		methods.changeImage("next");
+        	}, settings.changeInterval);
+
+        	settings.eles.mainWrap.on("mouseover", function() {
+        		clearInterval(settings.eles.timer);
+        	})
+
+        	settings.eles.mainWrap.on("mouseout", function() {
+        		methods.bindInterval();
         	})
         }
     };
