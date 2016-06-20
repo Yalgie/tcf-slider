@@ -26,6 +26,10 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindMouseOverEvents();
         	methods.checkLoop();
         	methods.bindResize();
+        	if (settings.auto) {
+        		// Up To Here
+        		methids.bindInterval();
+        	}
         },
 
         defineWrapElements: function() {
@@ -128,9 +132,11 @@ jQuery.fn.tcf_slider = function(options) {
         bindBlurEvents: function() {
         	settings.eles.prevWrap.on("mouseout", function() {
         		$(this).blur();
+        		$(this).children().animate({"marginLeft": 0}, {queue: false})
         	});
         	settings.eles.nextWrap.on("mouseout", function() {
         		$(this).blur();
+        		$(this).children().animate({"marginLeft": 0}, {queue: false})
         	});
         	settings.eles.crumbWrap.children().on("mouseout", function() {
         		$(this).blur();
@@ -140,9 +146,11 @@ jQuery.fn.tcf_slider = function(options) {
         bindMouseOverEvents: function() {
         	settings.eles.prevWrap.on("mouseover", function() {
         		$(this).focus();
+        		$(this).children().animate({"marginLeft": -15}, {queue: false})
         	});
         	settings.eles.nextWrap.on("mouseover", function() {
         		$(this).focus();
+        		$(this).children().animate({"marginLeft": 15}, {queue: false})
         	});
         	settings.eles.crumbWrap.children().on("mouseover", function() {
         		$(this).focus();
@@ -193,6 +201,7 @@ jQuery.fn.tcf_slider = function(options) {
         		settings.eles.mainWrap.css("height", tar.css("height"))
         		curr.addClass("tcf-abs")
         		tar.addClass("tcf-abs").show()
+
         		if (target > current) {
         			tar.css("left", "-100%")
         			curr.animate({"left": "100%"}, {queue: false})
