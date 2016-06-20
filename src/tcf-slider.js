@@ -5,7 +5,7 @@ jQuery.fn.tcf_slider = function(options) {
     var defaults = {
     	loop: true,
     	auto: true,
-    	transition: "fade",
+    	transition: "none",
     	activeCrumbColor: "#2FD565",
     };
 
@@ -23,6 +23,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindClickEvents();
         	methods.bindKeyboardEvents();
         	methods.bindBlurEvents();
+        	methods.bindMouseOverEvents();
         },
 
         defineWrapElements: function() {
@@ -80,24 +81,88 @@ jQuery.fn.tcf_slider = function(options) {
         },
 
         bindClickEvents: function() {
-
-
+        	settings.eles.prevWrap.on("click", function() {
+        		methods.prevImage();
+        	});
+        	settings.eles.nextWrap.on("click", function() {
+        		methods.nextImage();
+        	});
+        	settings.eles.crumbWrap.children().on("click", function() {
+        		console.log("Crumb")
+        	});
         },
 
         bindKeyboardEvents: function() {
-
+        	settings.eles.prevWrap.on("keydown", function(e) {
+        		if (e.which == 13) {
+        			methods.prevImage();
+        		}
+        	});
+        	settings.eles.nextWrap.on("keydown", function(e) {
+        		if (e.which == 13) {
+        			methods.nextImage();
+        		}
+        	});
+        	settings.eles.crumbWrap.children().on("keydown", function(e) {
+        		if (e.which == 13) {
+        			console.log("Crumb")
+        		}
+        	});
         },
 
         bindBlurEvents: function() {
         	settings.eles.prevWrap.on("mouseout", function() {
-        		$(this).blur()
+        		$(this).blur();
         	});
         	settings.eles.nextWrap.on("mouseout", function() {
-        		$(this).blur()
+        		$(this).blur();
         	});
         	settings.eles.crumbWrap.children().on("mouseout", function() {
-        		$(this).blur()
+        		$(this).blur();
         	});
+        },
+
+        bindMouseOverEvents: function() {
+        	settings.eles.prevWrap.on("mouseover", function() {
+        		$(this).focus();
+        	});
+        	settings.eles.nextWrap.on("mouseover", function() {
+        		$(this).focus();
+        	});
+        	settings.eles.crumbWrap.children().on("mouseover", function() {
+        		$(this).focus();
+        	});
+        },
+
+        nextImage: function() {
+        	var current = settings.eles.crumbWrap.find(".active").index()
+        	var next = current + 1;
+        	if (settings.transition == "none") {
+        		settings.eles.imageWrap.children().eq(current).hide()
+        		settings.eles.imageWrap.children().eq(next).show()
+        	}
+        	methods.updateCrumb(next)
+        	methods.checkParams()
+        },
+
+        prevImage: function() {
+        	var current = settings.eles.crumbWrap.find(".active").index()
+        	var prev = current - 1;
+        	if (settings.transition == "none") {
+        		settings.eles.imageWrap.children().eq(current).hide()
+        		settings.eles.imageWrap.children().eq(prev).show()
+        	}
+        	methods.updateCrumb(prev)
+        	methods.checkParams()
+        },
+
+        updateCrumb: function(i) {
+        	settings.eles.crumbWrap.find(".active").removeClass("active")
+        	settings.eles.crumbWrap.children().eq(i).addClass("active")
+        },
+
+        checkParams: function() {
+
         }
     };
 
