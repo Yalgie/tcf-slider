@@ -5,7 +5,7 @@ jQuery.fn.tcf_slider = function(options) {
     var defaults = {
     	loop: true,
     	auto: true,
-    	transition: "none",
+    	transition: "fade",
     	activeCrumbColor: "#2FD565",
     };
 
@@ -83,30 +83,30 @@ jQuery.fn.tcf_slider = function(options) {
 
         bindClickEvents: function() {
         	settings.eles.prevWrap.on("click", function() {
-        		methods.prevImage();
+        		methods.changeImage("prev")
         	});
         	settings.eles.nextWrap.on("click", function() {
-        		methods.nextImage();
+        		methods.changeImage("next")
         	});
         	settings.eles.crumbWrap.children().on("click", function() {
-        		console.log("Crumb")
+        		methods.changeImage("crumb", $(this).index())
         	});
         },
 
         bindKeyboardEvents: function() {
         	settings.eles.prevWrap.on("keydown", function(e) {
         		if (e.which == 13) {
-        			methods.prevImage();
+        			methods.changeImage("prev", $(this).index())
         		}
         	});
         	settings.eles.nextWrap.on("keydown", function(e) {
         		if (e.which == 13) {
-        			methods.nextImage();
+        			methods.changeImage("next", $(this).index())
         		}
         	});
         	settings.eles.crumbWrap.children().on("keydown", function(e) {
         		if (e.which == 13) {
-        			console.log("Crumb")
+        			methods.changeImage("crumb", $(this).index())
         		}
         	});
         },
@@ -135,32 +135,38 @@ jQuery.fn.tcf_slider = function(options) {
         	});
         },
 
-        nextImage: function() {
+        changeImage: function(direction, index) {
         	var current = settings.eles.crumbWrap.find(".active").index();
-        	var next = current + 1;
-        	if (settings.images[next] == undefined) {
-        		next = 0;
+        	var target;
+
+        	if (direction == "prev")
+        		target = current - 1;
+        	else if (direction == "next")
+        		target = current + 1;
+        	else
+        		target = index;
+
+        	if (settings.images[target] == undefined) {
+        		if (direction == "prev")
+        			target = settings.images.length - 1;
+        		else
+        			target = 0;
         	}
-        	if (settings.transition == "none") {
-        		settings.eles.imageWrap.children().eq(current).hide();
-        		settings.eles.imageWrap.children().eq(next).show();
-        	}
-        	methods.updateCrumb(next);
+        	methods.transitionImage(current, target);
+        	methods.updateCrumb(target);
         	methods.checkLoop();
         },
 
-        prevImage: function() {
-        	var current = settings.eles.crumbWrap.find(".active").index();
-        	var prev = current - 1;
-        	if (settings.images[prev] == undefined) {
-        		prev = settings.images.length - 1;
-        	}
+        transitionImage: function(current, target) {
         	if (settings.transition == "none") {
         		settings.eles.imageWrap.children().eq(current).hide();
-        		settings.eles.imageWrap.children().eq(prev).show();
+        		settings.eles.imageWrap.children().eq(target).show();
         	}
-        	methods.updateCrumb(prev);
-        	methods.checkLoop();
+        	else if (settings.transition == "fade") {
+        		settings.eles.imageWrap.children().eq(current).fadeOut(function() {
+        			settings.eles.imageWrap.children().eq(target).fadeIn();
+        		});
+        	}
         },
 
         updateCrumb: function(i) {
