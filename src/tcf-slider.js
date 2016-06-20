@@ -21,6 +21,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.buildImages();
         	methods.loadImages();
         	methods.buildNextBtn();
+        	methods.buildCaptions();
         	methods.buildCrumbs();
         	methods.bindClickEvents();
         	methods.bindKeyboardEvents();
@@ -28,6 +29,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindMouseOverEvents();
         	methods.checkLoop();
         	methods.bindResize();
+        	methods.updateCaption();
         	if (settings.autoChange) {
         		methods.bindInterval();
         	}
@@ -38,6 +40,7 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.imageWrap = $("<div class='tcf-slider-image-wrap' />");
         	settings.eles.prevWrap = $("<div tabindex='0' class='tcf-slider-prev-wrap' />");
         	settings.eles.nextWrap = $("<div tabindex='0' class='tcf-slider-next-wrap' />");
+        	settings.eles.captionWrap = $("<div class='tcf-slider-caption-wrap' />");
         	settings.eles.crumbWrap = $("<div class='tcf-slider-crumb-wrap' />");
         },
 
@@ -45,6 +48,7 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.prevBtn = $("<span class='tcf-slider-prev-btn'>&laquo;</span>");
         	settings.eles.image = $("<img class='tcf-slider-image' />");
         	settings.eles.nextBtn = $("<span class='tcf-slider-next-btn'>&raquo;</span>");
+        	settings.eles.caption = $("<span class='tcf-slider-caption'></span>");
         	settings.eles.crumb = $("<span tabindex='0' class='tcf-slider-crumb'>&bull;</span>");
         },
 
@@ -53,6 +57,7 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.mainWrap.append(settings.eles.prevWrap);
         	settings.eles.mainWrap.append(settings.eles.imageWrap);
         	settings.eles.mainWrap.append(settings.eles.nextWrap);
+        	settings.eles.mainWrap.append(settings.eles.captionWrap);
         	settings.eles.mainWrap.append(settings.eles.crumbWrap);
         },
 
@@ -89,6 +94,10 @@ jQuery.fn.tcf_slider = function(options) {
 
         buildNextBtn: function() {
         	settings.eles.nextWrap.append(settings.eles.nextBtn);
+        },
+
+        buildCaptions: function() {
+        	settings.eles.captionWrap.append(settings.eles.caption)
         },
 
         buildCrumbs: function() {
@@ -178,6 +187,7 @@ jQuery.fn.tcf_slider = function(options) {
 
 	        	methods.transitionImage(current, target);
 	        	methods.updateCrumb(target);
+	        	methods.updateCaption();
 	        	methods.checkLoop();
         	}
         },
@@ -243,6 +253,14 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.crumbWrap.children().eq(i).addClass("active");
         },
 
+        updateCaption: function() {
+        	var current = settings.eles.crumbWrap.find(".active").index();
+        	var target = settings.eles.imageWrap.children().eq(current);
+        	settings.eles.caption.html(
+        		target.attr("title")
+        	)
+        },
+
         checkLoop: function() {
         	var current = settings.eles.crumbWrap.find(".active").index();
         	var next = settings.images[current + 1];
@@ -273,16 +291,19 @@ jQuery.fn.tcf_slider = function(options) {
         },
 
         bindInterval: function() {
-        	settings.eles.timer = setInterval(function(){
+        	var timer = window.setInterval(function(){
         		methods.changeImage("next");
         	}, settings.changeInterval);
 
-        	settings.eles.mainWrap.on("mouseover", function() {
-        		clearInterval(settings.eles.timer);
+        	settings.eles.main.on("mouseover", function() {
+        		clearInterval(timer);
         	})
 
-        	settings.eles.mainWrap.on("mouseout", function() {
-        		methods.bindInterval();
+        	settings.eles.main.on("mouseout", function() {
+        		clearInterval(timer);
+        		timer = window.setInterval(function(){
+	        		methods.changeImage("next");
+	        	}, settings.changeInterval);
         	})
         }
     };
