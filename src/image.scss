@@ -1,6 +1,8 @@
 .tcf-slider-image {
 	width: 100%;
 	height: auto;
-	border-radius: $border-radius;
-	border: $border_standard;
+}
+.tcf-abs {
+	position: absolute;
+	top: 0px;
 }

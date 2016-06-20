@@ -5,6 +5,10 @@
   float: none; }
 
 .tcf-slider-wrap {
+  border-radius: 4px;
+  border: 1px solid #DDD;
+  overflow: hidden;
+  height: auto;
   width: 100%;
   position: relative;
   -webkit-touch-callout: none;
@@ -22,8 +26,8 @@
   width: 10%;
   text-align: center;
   outline: none;
-  display: block !important;
-  z-index: 2; }
+  z-index: 2;
+  color: #333; }
 
 .tcf-slider-prev-wrap {
   top: 0px;
@@ -55,9 +59,11 @@
 
 .tcf-slider-image {
   width: 100%;
-  height: auto;
-  border-radius: 4px;
-  border: 1px solid #DDD; }
+  height: auto; }
+
+.tcf-abs {
+  position: absolute;
+  top: 0px; }
 
 .tcf-slider-crumb-wrap {
   position: absolute;
@@ -69,6 +75,7 @@
 .tcf-slider-crumb {
   cursor: pointer;
   outline: none;
+  color: #333;
   margin-right: 5px; }
 
 .tcf-slider-crumb:last-child {

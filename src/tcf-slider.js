@@ -5,7 +5,7 @@ jQuery.fn.tcf_slider = function(options) {
     var defaults = {
     	loop: true,
     	auto: true,
-    	transition: "fade"
+    	transition: "slide"
     };
 
     var settings = $.extend( {}, defaults, options );
@@ -17,6 +17,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.buildWrappers();
         	methods.buildPrevBtn();
         	methods.buildImages();
+        	methods.loadImages();
         	methods.buildNextBtn();
         	methods.buildCrumbs();
         	methods.bindClickEvents();
@@ -24,6 +25,7 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.bindBlurEvents();
         	methods.bindMouseOverEvents();
         	methods.checkLoop();
+        	methods.bindResize();
         },
 
         defineWrapElements: function() {
@@ -67,6 +69,19 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.imageWrap.children().first().show();
         },
 
+        loadImages: function() {
+        	var $images = settings.eles.imageWrap.find("img");
+					var loaded_images_total = 0;
+					$images.load(function(){
+						loaded_images_total ++;
+						if (loaded_images_total == $images.length) {
+							var current = settings.eles.crumbWrap.find(".active").index();
+							var height = settings.eles.imageWrap.children().eq(current).css("height")
+	        		settings.eles.mainWrap.css("height", height)
+						}
+					});
+        },
+
         buildNextBtn: function() {
         	settings.eles.nextWrap.append(settings.eles.nextBtn);
         },
@@ -82,13 +97,13 @@ jQuery.fn.tcf_slider = function(options) {
 
         bindClickEvents: function() {
         	settings.eles.prevWrap.on("click", function() {
-        		methods.changeImage("prev")
+        		methods.changeImage("prev");
         	});
         	settings.eles.nextWrap.on("click", function() {
-        		methods.changeImage("next")
+        		methods.changeImage("next");
         	});
         	settings.eles.crumbWrap.children().on("click", function() {
-        		methods.changeImage("crumb", $(this).index())
+        		methods.changeImage("crumb", $(this).index());
         	});
         },
 
@@ -135,37 +150,67 @@ jQuery.fn.tcf_slider = function(options) {
         },
 
         changeImage: function(direction, index) {
-        	var current = settings.eles.crumbWrap.find(".active").index();
-        	var target;
+        	if (!settings.animating) {
+        		settings.animating = true;
+	        	var current = settings.eles.crumbWrap.find(".active").index();
+	        	var target;
 
-        	if (direction == "prev")
-        		target = current - 1;
-        	else if (direction == "next")
-        		target = current + 1;
-        	else
-        		target = index;
+	        	if (direction == "prev")
+	        		target = current - 1;
+	        	else if (direction == "next")
+	        		target = current + 1;
+	        	else
+	        		target = index;
 
-        	if (settings.images[target] == undefined) {
-        		if (direction == "prev")
-        			target = settings.images.length - 1;
-        		else
-        			target = 0;
+	        	if (settings.images[target] == undefined) {
+	        		if (direction == "prev")
+	        			target = settings.images.length - 1;
+	        		else
+	        			target = 0;
+	        	}
+
+	        	methods.transitionImage(current, target);
+	        	methods.updateCrumb(target);
+	        	methods.checkLoop();
         	}
-
-        	methods.transitionImage(current, target);
-        	methods.updateCrumb(target);
-        	methods.checkLoop();
         },
 
         transitionImage: function(current, target) {
         	if (settings.transition == "none") {
         		settings.eles.imageWrap.children().eq(current).hide();
         		settings.eles.imageWrap.children().eq(target).show();
+        		settings.animating = false;
         	}
         	else if (settings.transition == "fade") {
         		settings.eles.imageWrap.children().eq(current).fadeOut(function() {
         			settings.eles.imageWrap.children().eq(target).fadeIn();
+        			settings.animating = false;
         		});
+        	}
+        	else if (settings.transition == "slide") {
+        		var curr = settings.eles.imageWrap.children().eq(current);
+        		var tar = settings.eles.imageWrap.children().eq(target);
+        		settings.eles.mainWrap.css("height", tar.css("height"))
+        		curr.addClass("tcf-abs")
+        		tar.addClass("tcf-abs").show()
+        		if (target > current) {
+        			tar.css("left", "-100%")
+        			curr.animate({"left": "100%"}, {queue: false})
+        			tar.animate({"left": "0%"}, {queue: false, complete: function() {
+        				curr.removeClass("tcf-abs").hide()
+        				tar.removeClass("tcf-abs")
+        				settings.animating = false;
+        			}})
+        		}
+        		else {
+        			tar.css("left", "100%")
+        			curr.animate({"left": "-100%"}, {queue: false})
+        			tar.animate({"left": "0%"}, {queue: false, complete: function() {
+        				curr.removeClass("tcf-abs").hide()
+        				tar.removeClass("tcf-abs")
+        				settings.animating = false;
+        			}})
+        		}
         	}
         },
 
@@ -178,6 +223,7 @@ jQuery.fn.tcf_slider = function(options) {
         	var current = settings.eles.crumbWrap.find(".active").index();
         	var next = settings.images[current + 1];
         	if (!settings.loop) {
+
         		if (current == 0) {
         			settings.eles.prevWrap.fadeOut()
         		}
@@ -192,6 +238,14 @@ jQuery.fn.tcf_slider = function(options) {
         			settings.eles.nextWrap.fadeIn()
         		}
         	}
+        },
+
+        bindResize: function() {
+        	$(window).on("resize", function() {
+        		var current = settings.eles.crumbWrap.find(".active").index();
+						var height = settings.eles.imageWrap.children().eq(current).css("height")
+        		settings.eles.mainWrap.css("height", height)
+        	})
         }
     };
 
