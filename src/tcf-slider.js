@@ -20,14 +20,16 @@ jQuery.fn.tcf_slider = function(options) {
         	methods.buildImages();
         	methods.buildNextBtn();
         	methods.buildCrumbs();
-        	methods.applyDefaults();
+        	methods.bindClickEvents();
+        	methods.bindKeyboardEvents();
+        	methods.bindBlurEvents();
         },
 
         defineWrapElements: function() {
         	settings.eles.mainWrap = $("<div class='tcf-slider-wrap' />");
         	settings.eles.imageWrap = $("<div class='tcf-slider-image-wrap' />");
-        	settings.eles.prevWrap = $("<div class='tcf-slider-prev-wrap' />");
-        	settings.eles.nextWrap = $("<div class='tcf-slider-next-wrap' />");
+        	settings.eles.prevWrap = $("<div tabindex='0' class='tcf-slider-prev-wrap' />");
+        	settings.eles.nextWrap = $("<div tabindex='0' class='tcf-slider-next-wrap' />");
         	settings.eles.crumbWrap = $("<div class='tcf-slider-crumb-wrap' />");
         },
 
@@ -35,7 +37,7 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.eles.prevBtn = $("<span class='tcf-slider-prev-btn'>&laquo;</span>");
         	settings.eles.image = $("<img class='tcf-slider-image' />");
         	settings.eles.nextBtn = $("<span class='tcf-slider-next-btn'>&raquo;</span>");
-        	settings.eles.crumb = $("<span class='tcf-slider-crumb'>&bull;</span>");
+        	settings.eles.crumb = $("<span tabindex='0' class='tcf-slider-crumb'>&bull;</span>");
         },
 
         buildWrappers: function() {
@@ -72,16 +74,30 @@ jQuery.fn.tcf_slider = function(options) {
         	settings.images.map(function(item, i) {
         		settings.eles.crumbWrap.append(
         			settings.eles.crumb.clone()
-        		)
+        		);
         	})
-        	settings.eles.crumbWrap
-        	.children()
-        	.first()
-        	.addClass("active")
+        	settings.eles.crumbWrap.children().first().addClass("active");
         },
 
-        applyDefaults: function() {
+        bindClickEvents: function() {
 
+
+        },
+
+        bindKeyboardEvents: function() {
+
+        },
+
+        bindBlurEvents: function() {
+        	settings.eles.prevWrap.on("mouseout", function() {
+        		$(this).blur()
+        	});
+        	settings.eles.nextWrap.on("mouseout", function() {
+        		$(this).blur()
+        	});
+        	settings.eles.crumbWrap.children().on("mouseout", function() {
+        		$(this).blur()
+        	});
         }
     };
 

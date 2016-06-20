@@ -7,6 +7,7 @@
 }
 .tcf-slider-crumb {
 	cursor: pointer;
+	outline: none;
 	margin-right: 5px;
 }
 .tcf-slider-crumb:last-child {
@@ -15,3 +16,8 @@
 .tcf-slider-crumb.active {
 	color: green;
 }
+.tcf-slider-crumb:hover,
+.tcf-slider-crumb:focus {
+	text-decoration: underline;
+}
+
