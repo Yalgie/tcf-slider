@@ -14,7 +14,8 @@ TCF Slider is a simple jQuery slider plugin that is accessible and responsive. I
 ### Step 1
 Download and link to the minified files in the `/dist` folder.
 
-NPM / Bower packages will be coming soon.
+Or install via npm:
+`npm i -S tcf-slider`
 
 
 ### Step 2
