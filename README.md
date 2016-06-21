@@ -89,6 +89,9 @@ Default = 4000 (4 seconds).
 This option will only take affect if the above `autoChange` option is set to `true`, this option defines the amount of time it will take before the next image changes.
 
 ### Transition
+```javascript
+transition: "none"
+```
 Type = String.
 
 Default = "none" (no animation).
@@ -102,8 +105,36 @@ This option defines what type of animation you would like  the images to use whe
 
 
 ### Transition Duration
+```javascript
+transitionDuration: 400
+```
 Type = Int (Number).
 
 Default = 400 (0.4 seconds).
 
 This option defines the time it takes to animate between each image. This option will only take effect when the `transition` option is set to `slide` or `fade`.
+
+## Advanced Example
+Below is an advanced example showing how you how to implement the options:
+```javascript
+$(document).ready(function() {
+    $('#tcf-slider').tcf_slider({
+        loop: true,
+        autoChange: false,
+        transition: "slide",
+        changeInterval: 4000,
+        transitionDuration: 400,
+        images: [{
+            src: "images/image_1.jpg"
+        }, {
+            src: "images/image_2.jpg"
+        }, {
+            src: "images/image_3.jpg"
+        }, {
+            src: "images/image_4.jpg"
+        }, {
+            src: "images/image_5.jpg"
+        }]
+    })
+})
+```
