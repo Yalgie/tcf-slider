@@ -3,8 +3,8 @@
 jQuery.fn.tcf_slider = function(options) {
 
     var defaults = {
-    	loop: true,
-    	autoChange: true,
+    	loop: false,
+    	autoChange: false,
     	transition: "slide",
     	changeInterval: 4000,
     	transitionDuration: 400
