@@ -108,6 +108,14 @@ Default = 400 (0.4 seconds).
 
 This option defines the time it takes to animate between each image. This option will only take effect when the `transition` option is set to `slide` or `fade`.
 
+### Image Attributes
+Each image can have an `alt` and `title` attribute. If these are not defined the plugin will just append a blank attribute tag.
+```javascript
+src: "images/image_1.jpg",
+alt: "Alt Text",
+title: "Image Title"
+```
+
 ## Advanced Example
 Below is an advanced example showing how you how to implement the options:
 ```javascript
@@ -119,11 +127,13 @@ $(document).ready(function() {
         changeInterval: 4000,
         transitionDuration: 400,
         images: [{
-            src: "images/image_1.jpg"
+            src: "images/image_1.jpg",
+            alt: "Image alt"
         }, {
             src: "images/image_2.jpg"
         }, {
-            src: "images/image_3.jpg"
+            src: "images/image_3.jpg",
+            title: "Image Title"
         }, {
             src: "images/image_4.jpg"
         }, {
