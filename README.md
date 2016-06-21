@@ -51,12 +51,6 @@ Insert the reference div into your html file:
 And you're good to go! As long as you've referenced everything correctly, and all your files are correctly being linked to you should be sweet. Check out the options below to see some different ways you can customise the slider.
 
 ## Options
-
-loop: false,
-    	autoChange: false,
-    	transition: "slide",
-    	changeInterval: 4000,
-    	transitionDuration: 400
     	
 ### Loop
 ```javascript
