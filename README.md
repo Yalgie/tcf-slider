@@ -1,8 +1,4 @@
 # TCF Slider
-Website: [The Coding Forge](http://thecodingforge.com.au/).
-
-Email: <daniel@thecodingforge.com.au>.
-
 View a demo [here](http://thecodingforge.com.au/demos/tcf-slider/demo/index.html). Or download the repo and view the demo folder. 
 
 ----
